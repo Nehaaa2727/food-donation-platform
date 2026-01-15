@@ -1,9 +1,9 @@
 import mysql.connector
 
-def get_db_connection():
+def get_connection():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="",
-        database="food_donation_db"
+        password="root",
+        database="food_donation"
     )

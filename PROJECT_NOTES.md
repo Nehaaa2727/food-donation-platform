@@ -36,3 +36,28 @@
 ##problem faced and fixed
 -git remote url error
 -fixed using git remote set-url
+
+
+Day 2:
+• Created Flask app structure
+• Understood templates and static folders
+• Created MySQL database and donor table
+• Learned how Flask connects to MySQL using db.py
+
+• Flask automatically looks for HTML files inside templates folder
+• static folder is used for CSS, JS, images
+• db.py is used to keep database code separate from app.py
+
+(Flask → framework
+
+render_template → HTML file browser me show karne ke liye
+
+__name__ → Flask ko batata hai ki yahi main app hai) Flask(__name__) tells Flask where the app is running from
+. A route maps a URL to a Python function
+.debug mode helps during development
+.HTML files are rendered using render_template()
+
+def get_connection():
+bar bar connection code repeat na karna pade
+clean code rahe
+.Database connection code is separated to improve security and maintainability

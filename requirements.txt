@@ -2,3 +2,5 @@ flask
 mysql-connector-python
 flask-login
 werkzeug
+flask
+mysql-connector-python
