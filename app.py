@@ -88,6 +88,24 @@ def view_requests():
 
     return render_template('requests.html', requests=data)
 
+@app.route('/map')
+def map_view():
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT latitude, longitude 
+        FROM donors 
+        WHERE latitude IS NOT NULL AND longitude IS NOT NULL
+    """)
+    donors = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template('map.html', donors=donors)
+
+
 
 
 if __name__ == "__main__":
