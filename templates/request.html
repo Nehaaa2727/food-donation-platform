@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Request Food</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h2>Request Food</h2>
+
+<form method="POST">
+    <input type="text" name="receiver_name" placeholder="NGO / Receiver Name"><br><br>
+    <input type="text" name="food_needed" placeholder="Food Needed"><br><br>
+    <input type="number" name="quantity" placeholder="Quantity"><br><br>
+    <input type="text" name="location" placeholder="Location"><br><br>
+
+    <button type="submit">Submit Request</button>
+</form>
+
+</body>
+</html>

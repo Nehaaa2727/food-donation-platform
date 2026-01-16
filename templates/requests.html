@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Food Requests</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h2>Food Requests by NGOs</h2>
+
+<table border="1">
+<tr>
+    <th>Name</th>
+    <th>Food Needed</th>
+    <th>Quantity</th>
+    <th>Location</th>
+</tr>
+
+{% for r in requests %}
+<tr>
+    <td>{{ r['receiver_name'] }}</td>
+    <td>{{ r['food_needed'] }}</td>
+    <td>{{ r['quantity'] }}</td>
+    <td>{{ r['location'] }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html>
