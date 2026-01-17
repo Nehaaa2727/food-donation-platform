@@ -1,29 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Donate Food</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
-</head>
-<body>
+
+
+    {% extends "base.html" %}
+
+{% block content %}
 
 <h2>Donate Food</h2>
 
 <form method="POST">
-    <label>Name:</label><br>
-    <input type="text" name="name" required><br><br>
-
-    <label>Food Item:</label><br>
-    <input type="text" name="food_item" required><br><br>
-
-    <label>Quantity:</label><br>
-    <input type="number" name="quantity" required><br><br>
-
-    <label>Location:</label><br>
-    <input type="text" name="location" required><br><br>
-
+    Name: <input type="text" name="name"><br><br>
+    Food Item: <input type="text" name="food_item"><br><br>
+    Quantity: <input type="text" name="quantity"><br><br>
+    Location: <input type="text" name="location"><br><br>
     <button type="submit">Donate</button>
 </form>
 
-</body>
-</html>
+{% endblock %}
+
+

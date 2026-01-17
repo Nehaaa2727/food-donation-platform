@@ -1,12 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Food Donation Platform</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% extends "base.html" %}
 
-</head>
-<body>
-    <h1>Welcome to Food Donation Platform</h1>
-    <p>Donate surplus food and help others.</p>
-</body>
-</html>
+{% block content %}
+
+<div class="home-container">
+    <h1>Food Donation Platform</h1>
+    <p class="subtitle">
+        Connect surplus food with people who need it.
+    </p>
+
+    <div class="card-container">
+        <a href="/donate" class="card">Donate Food</a>
+        <a href="/donations" class="card">View Donations</a>
+        <a href="/request" class="card">Request Food</a>
+        <a href="/map" class="card">Donation Map</a>
+    </div>
+</div>
+
+{% endblock %}

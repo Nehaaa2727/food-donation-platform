@@ -163,3 +163,99 @@ The system now supports:
 This makes the application closer to real production systems.
 
 ##Day 5 helped me understand how real-world systems handle multiple user roles and how backend routes are designed accordingly.
+
+DAY 6
+To show food donation locations on a map using a free map service and real database data.
+
+What is Leaflet?
+.Open-source JavaScript map library
+.Uses OpenStreetMap
+.No API key
+.No billing
+.Works smoothly with Flask
+
+How the map works (FLOW)
+1️⃣ User opens /map page
+2️⃣ Flask gets donation data from MySQL
+3️⃣ Data is sent to map.html
+4️⃣ Jinja converts Python data → JavaScript
+5️⃣ Leaflet shows markers on map
+
+Backend (Flask) – Easy Explanation
+./map route created
+.Data fetched using SQL
+.dictionary=True used so we can access data by name
+.Donor data passed to HTML file
+
+Frontend (map.html) – Easy Explanation
+.Leaflet map is created
+.Map centered on India
+.OpenStreetMap tiles loaded
+.Donation data used to add markers
+.Clicking marker shows donor details
+
+
+DAY 7
+1. Template Inheritance (Most Important Concept)
+Kya seekha:
+.Flask me repeated HTML likhne se bachne ke liye base.html use kiya
+.Sab pages base.html ko extend karte hain
+Rule:
+.base.html → full HTML structure
+.Other pages → sirf content
+
+2. Duplicate Content Problem (Why it happened)
+Problem:
+.Page ke upar aur niche same cheez 2 baar aa rahi thi
+.Spacing bhi weird lag rahi thi
+Reason:
+.Page me HTML skeleton + base.html dono load ho rahe the
+Fix:
+Child templates se:
+<html>
+<head>
+<body>
+<title> REMOVED
+
+3. Navigation Without Typing URLs
+Pehle:
+.Manually URL likhna padta tha
+/donate, /donations, /map
+Ab:
+.Home page me cards / buttons
+.Sirf click → page open
+Benefit:
+.User friendly
+.Real-world app jaisa feel
+
+DAY 8
+1. Why Day 8 was needed
+Problem before Day 8:
+.Form submit karne ke baad:
+.Sirf plain text response
+.No confirmation for user
+.App thodi boring aur confusing lag rahi thi
+Goal:
+User ko clearly batana:
+✔ action successful hua
+✔ system ne kaam kar liya
+
+2. Flash Messages (Important Flask Feature)
+Kya seekha:
+.Flask ka flash() function
+.Temporary messages show karta hai
+.Next page load pe automatically visible
+
+3. Secret Key ka use
+Why needed:
+.Flash messages session me store hote hain
+.Isliye app.secret_key mandatory hai
+
+4. Redirect After POST (Best Practice)
+Pehle:
+.Form submit → same POST request
+Ab:
+.POST → redirect → GET
+Benefit:
+.Page refresh karne pe form dobara submit nahi hota
+.Clean user experience

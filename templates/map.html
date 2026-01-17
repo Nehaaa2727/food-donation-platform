@@ -1,58 +1,46 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Donation Map</title>
+{% extends "base.html" %}
 
-    <!-- Leaflet CSS -->
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    />
-
-    <!-- Leaflet JS -->
-    <script
-        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-    </script>
-
-    <style>
-        #map {
-            height: 500px;
-            width: 100%;
-        }
-    </style>
-</head>
-<body>
+{% block content %}
 
 <h2>Food Donation Locations</h2>
 
-<div id="map"></div>
+<div id="map" style="height:500px; width:100%;"></div>
+
+<!-- Leaflet CSS -->
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-    // Initialize map (India center)
+    // Create map (India center)
     var map = L.map('map').setView([28.6139, 77.2090], 5);
 
-    // OpenStreetMap tiles
+    // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Flask data
+    // Data from Flask
     var donors = {{ donors | tojson | safe }};
 
     // Add markers
     donors.forEach(function(d) {
         if (d.latitude && d.longitude) {
             L.marker([d.latitude, d.longitude])
-             .addTo(map)
-             .bindPopup(
-                "<b>Name:</b> " + d.name + "<br>" +
-                "<b>Food:</b> " + d.food_item + "<br>" +
-                "<b>Qty:</b> " + d.quantity + "<br>" +
-                "<b>Location:</b> " + d.location
-             );
+                .addTo(map)
+                .bindPopup(
+                    "<b>Name:</b> " + d.name + "<br>" +
+                    "<b>Food:</b> " + d.food_item + "<br>" +
+                    "<b>Quantity:</b> " + d.quantity + "<br>" +
+                    "<b>Location:</b> " + d.location
+                );
         }
     });
 </script>
 
-</body>
-</html>
+{% endblock %}
+

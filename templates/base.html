@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Food Donation Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/">Home</a>
+    <a href="/donate">Donate</a>
+    <a href="/donations">Donations</a>
+    <a href="/request">Request Food</a>
+    <a href="/requests">Requests</a>
+    <a href="/map">Map</a>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<div class="content">
+    {% block content %}{% endblock %}
+</div>
+
+<footer>
+    <p>© 2026 Food Donation Platform</p>
+</footer>
+</body>
+</html>

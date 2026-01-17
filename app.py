@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, flash
 from db import get_connection
 
+
 app = Flask(__name__)
+app.secret_key = "food_donation_secret"
 
 @app.route('/')
 def home():
@@ -11,19 +13,22 @@ def home():
 
 @app.route('/donate', methods=['GET', 'POST'])
 def donate():
-    if request.method =='POST':
+    if request.method == 'POST':
         name = request.form['name']
         food_item = request.form['food_item']
         quantity = request.form['quantity']
         location = request.form['location']
-
+        
+        if not name or not food_item or not quantity or not location:
+            flash("All fields are required!", "error")
+            return redirect(url_for('donate'))
+        
         conn = get_connection()
         cursor = conn.cursor()
 
         query = """
         INSERT INTO donors (name, food_item, quantity, location)
         VALUES (%s, %s, %s, %s)
-        
         """
         cursor.execute(query, (name, food_item, quantity, location))
         conn.commit()
@@ -31,8 +36,11 @@ def donate():
         cursor.close()
         conn.close()
 
-        return "Food donated successfully!"
+        flash("Food donated successfully!", "success")
+        return redirect(url_for('donate'))
+
     return render_template('donate.html')
+
 
 @app.route('/donations')
 def donations():
@@ -70,8 +78,11 @@ def request_food():
 
         cursor.close()
         conn.close()
+        flash("Food request submitted successfully!", "success")
+        return redirect(url_for('request_food'))
 
-        return "Food request submitted successfully!"
+
+  
 
     return render_template('request.html')
 
