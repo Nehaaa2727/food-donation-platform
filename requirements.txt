@@ -4,3 +4,4 @@ flask-login
 werkzeug
 flask
 mysql-connector-python
+gunicorn
