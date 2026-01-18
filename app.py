@@ -71,7 +71,9 @@ def request_food():
 
         query = """
         INSERT INTO receivers (receiver_name, food_needed, quantity, location)
-        VALUES (%s, %s, %s, %s)
+        VALUES (?, ?, ?, ?)
+
+
         """
         cursor.execute(query, (receiver_name, food_needed, quantity, location))
         conn.commit()
