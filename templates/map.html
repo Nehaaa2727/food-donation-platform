@@ -7,30 +7,30 @@
 <div id="map" style="height:500px; width:100%;"></div>
 
 <!-- Leaflet CSS -->
-<link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-    // Create map (India center)
     var map = L.map('map').setView([28.6139, 77.2090], 5);
 
-    // Add OpenStreetMap tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Data from Flask
-    var donors = {{ donors | tojson | safe }};
+    // ✅ Safe data handling
+    var donors = JSON.parse(
+        document.getElementById("donor-data").textContent
+    );
 
-    // Add markers
     donors.forEach(function(d) {
-        if (d.latitude && d.longitude) {
-            L.marker([d.latitude, d.longitude])
+        if (d.latitude != null && d.longitude != null) {
+
+            var lat = parseFloat(d.latitude);
+            var lng = parseFloat(d.longitude);
+
+            L.marker([lat, lng])
                 .addTo(map)
                 .bindPopup(
                     "<b>Name:</b> " + d.name + "<br>" +

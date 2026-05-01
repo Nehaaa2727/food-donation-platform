@@ -1,3 +1,5 @@
+from dbm import sqlite3
+
 from flask import Flask, render_template, request, redirect, url_for, flash
 from db import get_connection
 
@@ -15,7 +17,9 @@ def create_tables():
         name TEXT,
         food_item TEXT,
         quantity TEXT,
-        location TEXT
+        location TEXT,
+        latitude REAL,
+        longitude REAL
     )
     """)
 
@@ -52,26 +56,26 @@ def donate():
         food_item = request.form['food_item']
         quantity = request.form['quantity']
         location = request.form['location']
-        
-        if not name or not food_item or not quantity or not location:
-            flash("All fields are required!", "error")
-            return redirect(url_for('donate'))
-        
+
+        # ✅ ADD THIS (IMPORTANT)
+        latitude = 28.9845
+        longitude = 77.7064
+
         conn = get_connection()
         cursor = conn.cursor()
 
         query = """
-        INSERT INTO donors (name, food_item, quantity, location)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO donors (name, food_item, quantity, location, latitude, longitude)
+        VALUES (?, ?, ?, ?, ?, ?)
         """
-        cursor.execute(query, (name, food_item, quantity, location))
+
+        cursor.execute(query, (name, food_item, quantity, location, latitude, longitude))
         conn.commit()
 
         cursor.close()
         conn.close()
 
-        flash("Food donated successfully!", "success")
-        return redirect(url_for('donate'))
+        return redirect(url_for('donations'))
 
     return render_template('donate.html')
 
@@ -96,6 +100,8 @@ def request_food():
         food_needed = request.form['food_needed']
         quantity = request.form['quantity']
         location = request.form['location']
+        latitude = 28.9845
+        longitude = 77.7064
 
         if not receiver_name or not food_needed or not quantity or not location:
             return "Please fill all fields"
@@ -138,20 +144,17 @@ def view_requests():
 @app.route('/map')
 def map_view():
     conn = get_connection()
+    conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
 
-    cursor.execute("""
-        SELECT latitude, longitude 
-        FROM donors 
-        WHERE latitude IS NOT NULL AND longitude IS NOT NULL
-    """)
-    donors = cursor.fetchall()
+    cursor.execute("SELECT * FROM donors")
+    rows = cursor.fetchall()
 
-    cursor.close()
+    donors = [dict(row) for row in rows]
+
     conn.close()
 
     return render_template('map.html', donors=donors)
-
 
 
 if __name__ == "__main__":
