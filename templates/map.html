@@ -16,28 +16,20 @@
     var map = L.map('map').setView([28.6139, 77.2090], 5);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
+        attribution: 'OSM'
     }).addTo(map);
 
-    // ✅ Safe data handling
-    var donors = JSON.parse(
-        document.getElementById("donor-data").textContent
-    );
+    var donors = JSON.parse(document.getElementById("donor-data").textContent);
+
+    console.log("DATA:", donors);
 
     donors.forEach(function(d) {
+        console.log(d.latitude, d.longitude);
+
         if (d.latitude != null && d.longitude != null) {
-
-            var lat = parseFloat(d.latitude);
-            var lng = parseFloat(d.longitude);
-
-            L.marker([lat, lng])
+            L.marker([Number(d.latitude), Number(d.longitude)])
                 .addTo(map)
-                .bindPopup(
-                    "<b>Name:</b> " + d.name + "<br>" +
-                    "<b>Food:</b> " + d.food_item + "<br>" +
-                    "<b>Quantity:</b> " + d.quantity + "<br>" +
-                    "<b>Location:</b> " + d.location
-                );
+                .bindPopup(d.name);
         }
     });
 </script>
