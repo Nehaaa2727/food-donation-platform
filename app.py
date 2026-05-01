@@ -2,6 +2,36 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from db import get_connection
 
 
+def create_tables():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS donors (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        food_item TEXT,
+        quantity TEXT,
+        location TEXT,
+        latitude REAL,
+        longitude REAL
+    )
+    """)
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS receivers (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        receiver_name TEXT,
+        food_needed TEXT,
+        quantity TEXT,
+        location TEXT
+    )
+    """)
+
+    conn.commit()
+    conn.close()
+
+
 app = Flask(__name__)
 app.secret_key = "food_donation_secret"
 
@@ -28,7 +58,7 @@ def donate():
 
         query = """
         INSERT INTO donors (name, food_item, quantity, location)
-        VALUES (%s, %s, %s, %s)
+        VALUES (?, ?, ?, ?)
         """
         cursor.execute(query, (name, food_item, quantity, location))
         conn.commit()
@@ -45,7 +75,7 @@ def donate():
 @app.route('/donations')
 def donations():
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
 
     query = "SELECT * FROM donors"
     cursor.execute(query)
@@ -91,7 +121,7 @@ def request_food():
 @app.route('/requests')
 def view_requests():
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM receivers")
     data = cursor.fetchall()
@@ -104,7 +134,7 @@ def view_requests():
 @app.route('/map')
 def map_view():
     conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
 
     cursor.execute("""
         SELECT latitude, longitude 
@@ -120,6 +150,6 @@ def map_view():
 
 
 
-
 if __name__ == "__main__":
+    create_tables()   # 👈 ADD THIS LINE
     app.run()

@@ -259,3 +259,7 @@ Ab:
 Benefit:
 .Page refresh karne pe form dobara submit nahi hota
 .Clean user experience
+
+SQLite does not support %s placeholders.
+It uses ? for parameterized queries.
+Using %s causes sqlite3.OperationalError.
