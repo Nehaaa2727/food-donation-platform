@@ -6,20 +6,23 @@ def create_tables():
     conn = get_connection()
     cursor = conn.cursor()
 
+    # RESET TABLE (important for fix)
+    cursor.execute("DROP TABLE IF EXISTS donors")
+
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS donors (
+    CREATE TABLE donors (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
         food_item TEXT,
         quantity TEXT,
-        location TEXT,
-        latitude REAL,
-        longitude REAL
+        location TEXT
     )
     """)
 
+    cursor.execute("DROP TABLE IF EXISTS receivers")
+
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS receivers (
+    CREATE TABLE receivers (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         receiver_name TEXT,
         food_needed TEXT,
