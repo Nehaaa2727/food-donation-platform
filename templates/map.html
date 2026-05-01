@@ -10,32 +10,44 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <!-- Leaflet JS -->
- <script id="donor-data" type="application/json">
-    {{ donors | tojson }}
-</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+<!-- ✅ IMPORTANT: data injection -->
+<script id="donor-data" type="application/json">
+    {{ donors | tojson | safe }}
+</script>
+
 <script>
+    // Create map
     var map = L.map('map').setView([28.6139, 77.2090], 5);
 
+    // Tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'OSM'
     }).addTo(map);
 
-    var donors = JSON.parse(document.getElementById("donor-data").textContent);
+    // ✅ TEST MARKER (must show)
+    L.marker([28.9845, 77.7064]).addTo(map).bindPopup("Test Marker");
+
+    // Get data
+    var raw = document.getElementById("donor-data").textContent;
+    var donors = JSON.parse(raw);
 
     console.log("DATA:", donors);
 
-    donors.forEach(function(d) {
-        console.log(d.latitude, d.longitude);
+    // Add markers
+    for (let i = 0; i < donors.length; i++) {
+        let d = donors[i];
 
-        if (d.latitude != null && d.longitude != null) {
-            L.marker([Number(d.latitude), Number(d.longitude)])
+        let lat = parseFloat(d.latitude);
+        let lng = parseFloat(d.longitude);
+
+        if (!isNaN(lat) && !isNaN(lng)) {
+            L.marker([lat, lng])
                 .addTo(map)
-                .bindPopup(d.name);
+                .bindPopup(d.name + " - " + d.food_item);
         }
-    });
+    }
 </script>
 
 {% endblock %}
-
