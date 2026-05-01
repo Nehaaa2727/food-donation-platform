@@ -37,6 +37,7 @@ def create_tables():
 
 app = Flask(__name__)
 app.secret_key = "food_donation_secret"
+create_tables()
 
 @app.route('/')
 def home():
