@@ -10,16 +10,17 @@ def create_tables():
 
     # ✅ Donors table
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS donors (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        food_item TEXT,
-        quantity TEXT,
-        location TEXT,
-        latitude REAL,
-        longitude REAL
-    )
-    """)
+  CREATE TABLE IF NOT EXISTS donors (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    food_item TEXT,
+    quantity TEXT,
+    location TEXT,
+    latitude REAL,
+    longitude REAL,
+    user_id INTEGER
+)
+""")
 
     # ✅ Receivers table
     cursor.execute("""
@@ -168,7 +169,7 @@ def donations():
 
     # ✅ DONOR sees only their data (by name for now)
     elif session['role'] == 'donor':
-        cursor.execute("SELECT * FROM donors WHERE name=?", (session.get('name'),))
+           cursor.execute("SELECT * FROM donors")
 
     else:
         return "Access Denied"
