@@ -120,104 +120,119 @@ def admin_dashboard():
         return "Access Denied"
 
     return render_template('admin.html')
+# ---------------- DONATE ----------------
 @app.route('/donate', methods=['GET', 'POST'])
 def donate():
-   
+    # ✅ ROLE CHECK FIRST
+    if session.get('role') != 'donor':
+        return redirect('/')
+
     if request.method == 'POST':
         name = request.form['name']
         food_item = request.form['food_item']
         quantity = request.form['quantity']
         location = request.form['location']
 
-        # ✅ ADD THIS (IMPORTANT)
         latitude = 28.9845
         longitude = 77.7064
 
         conn = get_connection()
         cursor = conn.cursor()
 
-        query = """
-        INSERT INTO donors (name, food_item, quantity, location, latitude, longitude)
-        VALUES (?, ?, ?, ?, ?, ?)
-        """
+        cursor.execute("""
+            INSERT INTO donors (name, food_item, quantity, location, latitude, longitude)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (name, food_item, quantity, location, latitude, longitude))
 
-        cursor.execute(query, (name, food_item, quantity, location, latitude, longitude))
         conn.commit()
-
-        cursor.close()
         conn.close()
-    if 'role' not in session or session['role'] != 'donor':
-        return "Access Denied"
+
+        flash("Donation added successfully!", "success")
+        return redirect('/donations')
 
     return render_template('donate.html')
-       
 
 
-
+# ---------------- DONATIONS ----------------
 @app.route('/donations')
 def donations():
+    if 'role' not in session:
+        return redirect('/login')
+
     conn = get_connection()
     cursor = conn.cursor()
 
-    query = "SELECT * FROM donors"
-    cursor.execute(query)
-    data = cursor.fetchall()
+    # ✅ ADMIN sees all
+    if session['role'] == 'admin':
+        cursor.execute("SELECT * FROM donors")
 
-    cursor.close()
+    # ✅ DONOR sees only their data (by name for now)
+    elif session['role'] == 'donor':
+        cursor.execute("SELECT * FROM donors WHERE name=?", (session.get('name'),))
+
+    else:
+        return "Access Denied"
+
+    data = cursor.fetchall()
     conn.close()
+
     return render_template('donations.html', donations=data)
 
+
+# ---------------- REQUEST FOOD ----------------
 @app.route('/request', methods=['GET', 'POST'])
 def request_food():
+    # ✅ ROLE CHECK FIRST
+    if session.get('role') != 'receiver':
+        return redirect('/')
+
     if request.method == 'POST':
         receiver_name = request.form['receiver_name']
         food_needed = request.form['food_needed']
         quantity = request.form['quantity']
         location = request.form['location']
-        latitude = 28.9845
-        longitude = 77.7064
-
-        if not receiver_name or not food_needed or not quantity or not location:
-            return "Please fill all fields"
 
         conn = get_connection()
         cursor = conn.cursor()
 
-        query = """
-        INSERT INTO receivers (receiver_name, food_needed, quantity, location)
-        VALUES (?, ?, ?, ?)
+        cursor.execute("""
+            INSERT INTO receivers (receiver_name, food_needed, quantity, location)
+            VALUES (?, ?, ?, ?)
+        """, (receiver_name, food_needed, quantity, location))
 
-
-        """
-        cursor.execute(query, (receiver_name, food_needed, quantity, location))
         conn.commit()
-
-        cursor.close()
         conn.close()
-        flash("Food request submitted successfully!", "success")
-        return redirect(url_for('request_food'))
 
-
-  
-
-    if 'role' not in session or session['role'] != 'receiver':
-        return "Access Denied"
+        flash("Request submitted successfully!", "success")
+        return redirect('/requests')
 
     return render_template('request.html')
 
+
+# ---------------- VIEW REQUESTS ----------------
 @app.route('/requests')
 def view_requests():
+    if 'role' not in session:
+        return redirect('/login')
+
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM receivers")
-    data = cursor.fetchall()
+    # ✅ ADMIN sees all
+    if session['role'] == 'admin':
+        cursor.execute("SELECT * FROM receivers")
 
-    cursor.close()
+    # ✅ RECEIVER sees only their requests
+    elif session['role'] == 'receiver':
+        cursor.execute("SELECT * FROM receivers WHERE receiver_name=?", (session.get('name'),))
+
+    else:
+        return "Access Denied"
+
+    data = cursor.fetchall()
     conn.close()
 
     return render_template('requests.html', requests=data)
-
 #@app.route('/map')
 #def map_view():
     conn = get_connection()
