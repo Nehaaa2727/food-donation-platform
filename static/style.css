@@ -195,3 +195,127 @@ a {
     color: #ffb347;
     text-decoration: none;
 }
+.page-container {
+    width: 80%;
+    margin: 50px auto;
+}
+
+.card {
+    background: rgba(0,0,0,0.6);
+    padding: 20px;
+    border-radius: 15px;
+    color: white;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+}
+
+form input, form select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: none;
+}
+
+form button {
+    padding: 12px;
+    width: 100%;
+    background: linear-gradient(45deg, #ff7a18, #ffb347);
+    border: none;
+    border-radius: 8px;
+    color: white;
+}
+
+h2 {
+    color: white;
+}
+/* Background */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: url('/static/bg.jpg') no-repeat center center/cover;
+    min-height: 100vh;
+}
+
+/* Navbar */
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 40px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    align-items: center;
+}
+
+nav a {
+    margin-left: 20px;
+    color: white;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: #ffb347;
+}
+
+/* Content */
+.content {
+    width: 80%;
+    margin: 40px auto;
+}
+
+/* Cards */
+.card {
+    background: rgba(0,0,0,0.6);
+    padding: 20px;
+    border-radius: 15px;
+    color: white;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+}
+
+/* Forms */
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #ff7a18, #ffb347);
+    border: none;
+    border-radius: 8px;
+    color: white;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    color: white;
+    padding: 10px;
+}
+
+/* Flash messages */
+.flash-container {
+    width: 80%;
+    margin: 20px auto;
+}
+
+.flash {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.flash.success {
+    background: green;
+    color: white;
+}
+
+.flash.error {
+    background: red;
+    color: white;
+}

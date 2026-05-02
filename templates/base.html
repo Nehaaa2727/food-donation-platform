@@ -4,9 +4,10 @@
     <title>Food Donation Platform</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
 
-<nav id="q8l3sk">
+<nav>
     <h2>FoodDonate</h2>
     <div>
         <a href="/">Home</a>
@@ -16,7 +17,6 @@
         <a href="/signup">Signup</a>
     </div>
 </nav>
-nav {
 
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
@@ -37,5 +37,6 @@ nav {
 <footer>
     <p>© 2026 Food Donation Platform</p>
 </footer>
+
 </body>
 </html>
