@@ -54,6 +54,14 @@ create_tables()
 
 @app.route('/')
 def home():
+    if 'role' in session:
+        if session['role'] == 'admin':
+            return redirect('/admin')
+        elif session['role'] == 'donor':
+            return redirect('/donate')
+        else:
+            return redirect('/request')
+
     return render_template('index.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -135,6 +143,7 @@ def login():
                 return redirect('/request')
 
         else:
+            session.clear()   # 🔥 ADD THIS LINE
             flash("Invalid credentials", "error")
             return redirect('/login')
 
@@ -187,7 +196,7 @@ def admin_dashboard():
 def donate():
     # ✅ ROLE CHECK FIRST
     if session.get('role') != 'donor':
-        return redirect('/')
+      return redirect('/login')
 
     if request.method == 'POST':
         name = request.form['name']
@@ -241,7 +250,7 @@ def donations():
 @app.route('/request', methods=['GET', 'POST'])
 def request_food():
     if session.get('role') != 'receiver':
-        return redirect('/login')
+      return redirect('/login')
 
     if request.method == 'POST':
         receiver_name = request.form['receiver_name']
