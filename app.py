@@ -10,7 +10,7 @@ def create_tables():
 
     # ✅ Donors table
     cursor.execute("""
-  CREATE TABLE IF NOT EXISTS donors (
+    CREATE TABLE IF NOT EXISTS donors (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
     food_item TEXT,
@@ -22,16 +22,16 @@ def create_tables():
 )
 """)
 
-    # ✅ Receivers table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS receivers (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        receiver_name TEXT,
-        food_needed TEXT,
-        quantity TEXT,
-        location TEXT
-    )
-    """)
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    receiver_name TEXT,
+    food_needed TEXT,
+    quantity TEXT,
+    location TEXT,
+    user_id INTEGER
+)
+""")
 
     # ✅ Users table (NEW)
     cursor.execute("""
@@ -98,6 +98,7 @@ def login():
 
         if user:
             session['user_id'] = user[0]
+            session['name'] = user[1]   # ✅ IMPORTANT
             session['role'] = user[4]
 
             if user[4] == 'admin':
@@ -163,13 +164,11 @@ def donations():
     conn = get_connection()
     cursor = conn.cursor()
 
-    # ✅ ADMIN sees all
     if session['role'] == 'admin':
         cursor.execute("SELECT * FROM donors")
 
-    # ✅ DONOR sees only their data (by name for now)
     elif session['role'] == 'donor':
-           cursor.execute("SELECT * FROM donors")
+        cursor.execute("SELECT * FROM donors WHERE user_id=?", (session['user_id'],))
 
     else:
         return "Access Denied"
@@ -183,9 +182,8 @@ def donations():
 # ---------------- REQUEST FOOD ----------------
 @app.route('/request', methods=['GET', 'POST'])
 def request_food():
-    # ✅ ROLE CHECK FIRST
     if session.get('role') != 'receiver':
-        return redirect('/')
+        return redirect('/login')
 
     if request.method == 'POST':
         receiver_name = request.form['receiver_name']
@@ -197,14 +195,14 @@ def request_food():
         cursor = conn.cursor()
 
         cursor.execute("""
-            INSERT INTO receivers (receiver_name, food_needed, quantity, location)
-            VALUES (?, ?, ?, ?)
-        """, (receiver_name, food_needed, quantity, location))
+            INSERT INTO receivers (receiver_name, food_needed, quantity, location, user_id)
+            VALUES (?, ?, ?, ?, ?)
+        """, (receiver_name, food_needed, quantity, location, session['user_id']))
 
         conn.commit()
         conn.close()
 
-        flash("Request submitted successfully!", "success")
+        flash("Request added successfully!", "success")
         return redirect('/requests')
 
     return render_template('request.html')
@@ -219,13 +217,11 @@ def view_requests():
     conn = get_connection()
     cursor = conn.cursor()
 
-    # ✅ ADMIN sees all
     if session['role'] == 'admin':
         cursor.execute("SELECT * FROM receivers")
 
-    # ✅ RECEIVER sees only their requests
     elif session['role'] == 'receiver':
-        cursor.execute("SELECT * FROM receivers WHERE receiver_name=?", (session.get('name'),))
+        cursor.execute("SELECT * FROM receivers WHERE user_id=?", (session['user_id'],))
 
     else:
         return "Access Denied"
