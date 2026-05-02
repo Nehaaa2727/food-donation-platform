@@ -10,15 +10,15 @@ def create_tables():
 
     # ✅ Donors table
     cursor.execute("""
-    CREATE TABLE IF NOT EXISTS donors (
+CREATE TABLE IF NOT EXISTS donors (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
     name TEXT,
     food_item TEXT,
     quantity TEXT,
     location TEXT,
     latitude REAL,
-    longitude REAL,
-    user_id INTEGER
+    longitude REAL
 )
 """)
 
@@ -64,17 +64,37 @@ def signup():
         password = request.form['password']
         role = request.form['role']
 
+        # ✅ Validation
+        if not name or not email or not password or not role:
+            flash("All fields are required", "error")
+            return redirect('/signup')
+
+        if len(password) < 4:
+            flash("Password must be at least 4 characters", "error")
+            return redirect('/signup')
+
         conn = get_connection()
         cursor = conn.cursor()
 
-        cursor.execute(
-            "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
-            (name, email, password, role)
-        )
+        # ✅ Check duplicate email
+        cursor.execute("SELECT * FROM users WHERE email=?", (email,))
+        existing = cursor.fetchone()
+
+        if existing:
+            conn.close()
+            flash("Email already exists", "error")
+            return redirect('/signup')
+
+        # ✅ Insert user
+        cursor.execute("""
+            INSERT INTO users (name, email, password, role)
+            VALUES (?, ?, ?, ?)
+        """, (name, email, password, role))
 
         conn.commit()
         conn.close()
 
+        flash("Signup successful! Please login.", "success")
         return redirect('/login')
 
     return render_template('signup.html')
@@ -84,6 +104,11 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+
+        # ✅ Validation
+        if not email or not password:
+            flash("Please fill all fields", "error")
+            return redirect('/login')
 
         conn = get_connection()
         cursor = conn.cursor()
@@ -98,9 +123,10 @@ def login():
 
         if user:
             session['user_id'] = user[0]
-            session['name'] = user[1]   # ✅ IMPORTANT
+            session['name'] = user[1]
             session['role'] = user[4]
 
+            # ✅ Role-based redirect
             if user[4] == 'admin':
                 return redirect('/admin')
             elif user[4] == 'donor':
@@ -108,7 +134,9 @@ def login():
             else:
                 return redirect('/request')
 
-        return "Invalid credentials"
+        else:
+            flash("Invalid credentials", "error")
+            return redirect('/login')
 
     return render_template('login.html')
 
@@ -174,9 +202,11 @@ def donate():
         cursor = conn.cursor()
 
         cursor.execute("""
-            INSERT INTO donors (name, food_item, quantity, location, latitude, longitude)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (name, food_item, quantity, location, latitude, longitude))
+INSERT INTO donors (user_id, name, food_item, quantity, location, latitude, longitude)
+VALUES (?, ?, ?, ?, ?, ?, ?)
+""", (
+    session['user_id'], name, food_item, quantity, location, latitude, longitude
+))
 
         conn.commit()
         conn.close()
@@ -190,20 +220,16 @@ def donate():
 # ---------------- DONATIONS ----------------
 @app.route('/donations')
 def donations():
-    if 'role' not in session:
+    if session.get('role') != 'donor':
         return redirect('/login')
 
     conn = get_connection()
     cursor = conn.cursor()
 
-    if session['role'] == 'admin':
-        cursor.execute("SELECT * FROM donors")
-
-    elif session['role'] == 'donor':
-        cursor.execute("SELECT * FROM donors WHERE user_id=?", (session['user_id'],))
-
-    else:
-        return "Access Denied"
+    cursor.execute(
+        "SELECT * FROM donors WHERE user_id=?",
+        (session['user_id'],)
+    )
 
     data = cursor.fetchall()
     conn.close()
