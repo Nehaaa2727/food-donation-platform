@@ -10,26 +10,26 @@
 <nav>
     <h2>FoodDonate</h2>
    <div>
-    {% if session.get('role') == 'admin' %}
-        <a href="/admin">Dashboard</a>
-        <a href="/donations">All Donations</a>
-        <a href="/requests">All Requests</a>
+{% if session.get('role') == 'admin' %}
+    <a href="/admin">Dashboard</a>
+    <a href="/donations">All Donations</a>
+    <a href="/requests">All Requests</a>
 
-    {% elif session.get('role') == 'donor' %}
-        <a href="/donate">Donate</a>
-        <a href="/donations">My Donations</a>
+{% elif session.get('role') == 'donor' %}
+    <a href="/donate">Donate</a>
+    <a href="/donations">My Donations</a>
 
-    {% elif session.get('role') == 'receiver' %}
-        <a href="/request">Request Food</a>
-        <a href="/requests">My Requests</a>
-    {% endif %}
+{% elif session.get('role') == 'receiver' %}
+    <a href="/request">Request</a>
+    <a href="/requests">My Requests</a>
 
-    {% if session.get('user_id') %}
-        <a href="/logout">Logout</a>
-    {% else %}
-        <a href="/login">Login</a>
-        <a href="/signup">Signup</a>
-    {% endif %}
+{% endif %}
+
+{% if session.get('user_id') %}
+    <a href="/logout">Logout</a>
+{% else %}
+    <a href="/login">Login</a>
+{% endif %}
 </div>
 </nav>
 

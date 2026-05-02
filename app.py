@@ -143,9 +143,10 @@ def login():
                 return redirect('/request')
 
         else:
-            session.clear()   # 🔥 ADD THIS LINE
-            flash("Invalid credentials", "error")
-            return redirect('/login')
+         session.clear()   # 🔥 clear old session
+         session.pop('_flashes', None)   # 🔥 clear old messages
+         flash("Invalid credentials", "error")
+         return redirect('/login')
 
     return render_template('login.html')
 
