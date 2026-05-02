@@ -1,6 +1,6 @@
 from dbm import sqlite3
 
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash , session
 from db import get_connection
 
 
@@ -8,11 +8,9 @@ def create_tables():
     conn = get_connection()
     cursor = conn.cursor()
 
-    # RESET TABLE (important for fix)
-    cursor.execute("DROP TABLE IF EXISTS donors")
-
+    # ✅ Donors table
     cursor.execute("""
-    CREATE TABLE donors (
+    CREATE TABLE IF NOT EXISTS donors (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
         food_item TEXT,
@@ -23,15 +21,25 @@ def create_tables():
     )
     """)
 
-    cursor.execute("DROP TABLE IF EXISTS receivers")
-
+    # ✅ Receivers table
     cursor.execute("""
-    CREATE TABLE receivers (
+    CREATE TABLE IF NOT EXISTS receivers (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         receiver_name TEXT,
         food_needed TEXT,
         quantity TEXT,
         location TEXT
+    )
+    """)
+
+    # ✅ Users table (NEW)
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        email TEXT UNIQUE,
+        password TEXT,
+        role TEXT
     )
     """)
 
@@ -47,7 +55,65 @@ create_tables()
 def home():
     return render_template('index.html')
 
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+        role = request.form['role']
 
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(
+            "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)",
+            (name, email, password, role)
+        )
+
+        conn.commit()
+        conn.close()
+
+        return redirect('/login')
+
+    return render_template('signup.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute(
+            "SELECT * FROM users WHERE email=? AND password=?",
+            (email, password)
+        )
+
+        user = cursor.fetchone()
+        conn.close()
+
+        if user:
+            session['user_id'] = user[0]
+            session['role'] = user[4]
+
+            if user[4] == 'admin':
+                return redirect('/')
+            elif user[4] == 'donor':
+                return redirect('/donate')
+            else:
+                return redirect('/request')
+
+        return "Invalid credentials"
+
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/login')
 
 @app.route('/donate', methods=['GET', 'POST'])
 def donate():
@@ -141,8 +207,8 @@ def view_requests():
 
     return render_template('requests.html', requests=data)
 
-@app.route('/map')
-def map_view():
+#@app.route('/map')
+#def map_view():
     conn = get_connection()
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()

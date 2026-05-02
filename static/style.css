@@ -100,3 +100,42 @@ footer {
     background-color: #f8d7da;
     color: #721c24;
 }
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: url('/static/bg.jpg') no-repeat center center/cover;
+    height: 100vh;
+}
+
+.container {
+    width: 350px;
+    margin: 100px auto;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    border-radius: 15px;
+    color: white;
+    text-align: center;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(45deg, #ff7a18, #ffb347);
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
