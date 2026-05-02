@@ -100,7 +100,7 @@ def login():
             session['role'] = user[4]
 
             if user[4] == 'admin':
-                return redirect('/')
+                return redirect('/admin')
             elif user[4] == 'donor':
                 return redirect('/donate')
             else:
@@ -114,9 +114,15 @@ def login():
 def logout():
     session.clear()
     return redirect('/login')
+@app.route('/admin')
+def admin_dashboard():
+    if 'role' not in session or session['role'] != 'admin':
+        return "Access Denied"
 
+    return render_template('admin.html')
 @app.route('/donate', methods=['GET', 'POST'])
 def donate():
+   
     if request.method == 'POST':
         name = request.form['name']
         food_item = request.form['food_item']
@@ -140,10 +146,12 @@ def donate():
 
         cursor.close()
         conn.close()
-
-        return redirect(url_for('donations'))
+    if 'role' not in session or session['role'] != 'donor':
+        return "Access Denied"
 
     return render_template('donate.html')
+       
+
 
 
 @app.route('/donations')
@@ -191,6 +199,9 @@ def request_food():
 
 
   
+
+    if 'role' not in session or session['role'] != 'receiver':
+        return "Access Denied"
 
     return render_template('request.html')
 

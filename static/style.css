@@ -319,3 +319,29 @@ footer {
     background: red;
     color: white;
 }
+/* Default */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+}
+
+/* Login/Signup */
+.auth-bg {
+    background: url('/static/bg.jpg') no-repeat center center/cover;
+}
+
+/* Dashboard */
+.dashboard-bg {
+    background: linear-gradient(to right, #141e30, #243b55);
+}
+
+/* Donate */
+.donate-bg {
+    background: linear-gradient(to right, #ff7a18, #ffb347);
+}
+
+/* Request */
+.request-bg {
+    background: linear-gradient(to right, #56ab2f, #a8e063);
+}
