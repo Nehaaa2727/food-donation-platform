@@ -1,60 +1,113 @@
-🍱 Food Donation Platform
+# 🍱 Food Donation Platform
 
-A web-based application that helps connect food donors with people or organizations in need.
-This project is built using Flask, SQLite, HTML, CSS, and focuses on solving the real-world problem of food wastage.
+A role-based web application designed to connect food donors with people in need, helping reduce food waste and support communities.
 
-🚀 Project Objective
-The main goal of this project is to:
-.Reduce food wastage
-.Allow users to donate surplus food easily
-.Maintain a record of all food donations
-.View donation locations on a map
+---
 
-🛠️ Tech Stack Used
-.Backend: Python (Flask)
-.Database: SQLite3
-.Frontend: HTML, CSS, Jinja2
-.Maps: Leaflet.js + OpenStreetMap
-.Version Control: Git & GitHub
-.Deployment: Render
+## 🚀 Live Features
 
-📁 Project Structure
-food-donation-platform/
-│
-├── app.py
-├── db.py
-├── food.db
-├── requirements.txt
-├── README.md
-│
+### 🔐 Authentication
+- Secure Login & Signup system
+- Role-based access control
+
+### 👤 User Roles
+
+#### 👑 Admin
+- View total donations, requests, and users
+- Access admin dashboard with recent activity
+- Monitor overall system
+
+#### 🍛 Donor
+- Add food donations
+- View personal donation history
+
+#### 🙋 Receiver
+- Request food
+- View all food requests
+
+---
+
+## 📊 Dashboard Highlights
+
+- Total Donations Count  
+- Total Requests Count  
+- Total Users  
+- Recent Donations & Requests  
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer       | Technology        |
+|------------|------------------|
+| Frontend   | HTML, CSS        |
+| Backend    | Flask (Python)   |
+| Database   | SQLite           |
+| Deployment | Railway          |
+
+---
+
+## 📂 Project Structure
+
+├── static/
+│ ├── style.css
+│ └── images/
 ├── templates/
-│   ├── index.html
-│   ├── donate.html
-│   ├── donations.html
-│   ├── map.html
-│   ├── request.html
-│   └── requests.html
-│
-└── static/
-    └── style.css
+│ ├── base.html
+│ ├── login.html
+│ ├── signup.html
+│ ├── donate.html
+│ ├── request.html
+│ ├── donations.html
+│ ├── requests.html
+│ └── admin.html├── app.py
+├── requirements.txt
+└── README.md
 
-⚙️ Features
-.🥗 Donate food using a simple form
-.📋 View all donated food entries
-.🗺️ View donation locations on an interactive map
-.📦 Request food (basic implementation)
-.🎨 Clean UI with navigation buttons (no manual URL typing)
 
-🧠 What I Learned From This Project
-.How Flask routing works
-.Connecting Flask with SQLite database
-.Difference between MySQL and SQLite query placeholders (%s vs ?)
-.Using Jinja2 templates
-.Handling form data using POST requests
-.Debugging common Flask & SQL errors
-.Deploying a Flask application on Render
-.Using GitHub properly for version contro
+---
 
+## 🔑 Key Functionalities
+
+- Role-based redirection after login  
+- Session handling for authentication  
+- Food donation and request system  
+- Admin analytics dashboard  
+- Clean and responsive UI  
+
+---
+
+## ⚠️ Important Note
+
+- This project uses SQLite for simplicity  
+- Data may reset on deployment platforms like Railway  
+
+---
+
+## 💡 Future Enhancements
+
+- PostgreSQL integration (persistent database)  
+- Live location-based food tracking (map integration)  
+- Notification system  
+- Food pickup scheduling  
+- Image upload for donations  
+
+---
+
+## 🎯 Project Goal
+
+To build a simple yet impactful platform that:
+- Reduces food waste  
+- Helps people in need  
+- Demonstrates full-stack development skills  
+
+---
+
+## 👩‍💻 Author
+
+**Neha Wadhwa**
+
+---
 ▶️ How to Run Locally
 1.Clone the repository
 git clone https://github.com/Nehaaa2727
@@ -65,3 +118,13 @@ pip install -r requirements.txt
 python app.py
 4.Open browser
 http://127.0.0.1:5000/
+
+
+## ⚠️ Note
+
+Data may reset occasionally due to deployment environment.  
+If login fails, please create a new account using Signup.
+
+
+## 🌐 Live Demo
+https://food-donation-platform-production-91c9.up.railway.app/

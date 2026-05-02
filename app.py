@@ -109,11 +109,14 @@ def signup():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+
     if request.method == 'POST':
+        # 🔥 clear old messages BEFORE new login attempt
+        session.pop('_flashes', None)
+
         email = request.form['email']
         password = request.form['password']
 
-        # ✅ Validation
         if not email or not password:
             flash("Please fill all fields", "error")
             return redirect('/login')
@@ -134,7 +137,6 @@ def login():
             session['name'] = user[1]
             session['role'] = user[4]
 
-            # ✅ Role-based redirect
             if user[4] == 'admin':
                 return redirect('/admin')
             elif user[4] == 'donor':
@@ -143,10 +145,9 @@ def login():
                 return redirect('/request')
 
         else:
-         session.clear()   # 🔥 clear old session
-         session.pop('_flashes', None)   # 🔥 clear old messages
-         flash("Invalid credentials", "error")
-         return redirect('/login')
+            session.clear()  # 🔥 important
+            flash("Invalid credentials", "error")
+            return redirect('/login')
 
     return render_template('login.html')
 
