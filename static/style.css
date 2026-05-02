@@ -139,3 +139,59 @@ button {
 h2 {
     margin-bottom: 20px;
 }
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 50px;
+    background: rgba(0,0,0,0.5);
+    color: white;
+}
+
+nav a {
+    margin-left: 15px;
+    color: white;
+    text-decoration: none;
+}
+
+nav a:hover {
+    color: #ffb347;
+}
+.container {
+    width: 350px;
+    margin: 120px auto;
+    padding: 30px;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    color: #ffffff;
+    text-align: center;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin: 12px 0;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #ff7a18, #ffb347);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+a {
+    color: #ffb347;
+    text-decoration: none;
+}
