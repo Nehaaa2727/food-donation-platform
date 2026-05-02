@@ -1,28 +1,26 @@
-
-
 {% extends "base.html" %}
 
 {% block content %}
 
-<h2>All Food Requests</h2>
+<div class="page-header">
+    <h2>🙋 Food Requests</h2>
+</div>
 
-<table>
-    <tr>
-        <th>receiver_name</th>
-        <th>Food Needed</th>
-        <th>Quantity</th>
-        <th>Location</th>
-    </tr>
+<div class="card-grid">
 
     {% for r in requests %}
-    <tr>
-        <td>{{ r.receiver_name }}</td>
-        <td>{{ r.food_needed }}</td>
-        <td>{{ r.quantity }}</td>
-        <td>{{ r.location }}</td>
-    </tr>
+    <div class="donation-card">
+
+        <h3>{{ r[1] }}</h3>
+
+        <p>🍛 <b>Food Needed:</b> {{ r[2] }}</p>
+        <p>📦 <b>Quantity:</b> {{ r[3] }}</p>
+        <p>📍 <b>Location:</b> {{ r[4] }}</p>
+
+    </div>
     {% endfor %}
-</table>
+
+</div>
 
 {% endblock %}
 

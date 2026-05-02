@@ -1,18 +1,27 @@
 
-
 {% extends "base.html" %}
 
 {% block content %}
 
-<h2>Request Food</h2>
+<div class="form-container">
 
-<form method="POST">
-    Name: <input type="text" name="receiver_name"><br><br>
-    Food Needed: <input type="text" name="food_needed"><br><br>
-    Quantity: <input type="text" name="quantity"><br><br>
-    Location: <input type="text" name="location"><br><br>
-    <button type="submit">Request</button>
-</form>
+    <h2>🙋 Request Food</h2>
+
+    <form method="POST">
+
+        <input type="text" name="receiver_name" placeholder="Your Name" required>
+
+        <input type="text" name="food_needed" placeholder="Food Needed (e.g. Rice, Roti)" required>
+
+        <input type="text" name="quantity" placeholder="Quantity (e.g. 5 plates / 2 kg)" required>
+
+        <input type="text" name="location" placeholder="Your Location" required>
+
+        <button type="submit">Submit Request</button>
+
+    </form>
+
+</div>
 
 {% endblock %}
 

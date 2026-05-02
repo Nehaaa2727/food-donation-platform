@@ -116,12 +116,44 @@ def login():
 def logout():
     session.clear()
     return redirect('/login')
+
+
 @app.route('/admin')
 def admin_dashboard():
-    if 'role' not in session or session['role'] != 'admin':
-        return "Access Denied"
+    if session.get('role') != 'admin':
+        return redirect('/login')
 
-    return render_template('admin.html')
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    # Counts
+    cursor.execute("SELECT COUNT(*) FROM donors")
+    total_donations = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM receivers")
+    total_requests = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM users")
+    total_users = cursor.fetchone()[0]
+
+    # 🔥 NEW: Recent donations
+    cursor.execute("SELECT * FROM donors ORDER BY id DESC LIMIT 3")
+    recent_donations = cursor.fetchall()
+
+    # 🔥 NEW: Recent requests
+    cursor.execute("SELECT * FROM receivers ORDER BY id DESC LIMIT 3")
+    recent_requests = cursor.fetchall()
+
+    conn.close()
+
+    return render_template(
+        'admin.html',
+        total_donations=total_donations,
+        total_requests=total_requests,
+        total_users=total_users,
+        recent_donations=recent_donations,
+        recent_requests=recent_requests
+    )
 # ---------------- DONATE ----------------
 @app.route('/donate', methods=['GET', 'POST'])
 def donate():

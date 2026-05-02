@@ -3,17 +3,43 @@
 {% block content %}
 
 <div class="home-container">
-    <h1>Food Donation Platform</h1>
+
+    <h1>🍱 Food Donation Platform</h1>
     <p class="subtitle">
-        Connect surplus food with people who need it.
+        Reduce food waste. Help those in need.
     </p>
 
+    {% if session.get('user_id') %}
+    
+    <!-- Logged in user -->
     <div class="card-container">
-        <a href="/donate" class="card">Donate Food</a>
-        <a href="/donations" class="card">View Donations</a>
-        <a href="/request" class="card">Request Food</a>
-        <a href="/map" class="card">Donation Map</a>
+
+        {% if session.get('role') == 'donor' %}
+            <a href="/donate" class="card">Donate Food</a>
+            <a href="/donations" class="card">My Donations</a>
+
+        {% elif session.get('role') == 'receiver' %}
+            <a href="/request" class="card">Request Food</a>
+            <a href="/requests" class="card">My Requests</a>
+
+        {% elif session.get('role') == 'admin' %}
+            <a href="/admin" class="card">Admin Dashboard</a>
+            <a href="/donations" class="card">All Donations</a>
+            <a href="/requests" class="card">All Requests</a>
+        {% endif %}
+
     </div>
+
+    {% else %}
+
+    <!-- Not logged in -->
+    <div class="card-container">
+        <a href="/login" class="card">Login</a>
+        <a href="/signup" class="card">Signup</a>
+    </div>
+
+    {% endif %}
+
 </div>
 
 {% endblock %}

@@ -345,3 +345,100 @@ body {
 .request-bg {
     background: linear-gradient(to right, #56ab2f, #a8e063);
 }
+.home-container {
+    text-align: center;
+    margin-top: 100px;
+    color: white;
+}
+
+.subtitle {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    padding: 20px 30px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    background: #ff7a18;
+}
+.page-header {
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+}
+
+/* Grid Layout */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/* Card Design */
+.donation-card {
+    background: rgba(0,0,0,0.6);
+    padding: 20px;
+    border-radius: 15px;
+    color: white;
+    transition: 0.3s;
+    backdrop-filter: blur(10px);
+}
+
+/* Hover Effect */
+.donation-card:hover {
+    transform: translateY(-5px);
+    background: linear-gradient(45deg, #ff7a18, #ffb347);
+}
+/* Center Form */
+.form-container {
+    width: 350px;
+    margin: 100px auto;
+    padding: 30px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 15px;
+    color: white;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+/* Inputs */
+.form-container input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+}
+
+/* Button */
+.form-container button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(45deg, #56ab2f, #a8e063);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Hover */
+.form-container button:hover {
+    opacity: 0.9;
+}
